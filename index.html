@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Céu Aberto | Clube de Astronomia Amadora</title>
+  <meta name="description" content="Observações guiadas, telescópios compartilhados e dados abertos do céu. Entre para o Céu Aberto.">
+
+  <!-- ============================================================
+       [GTM] INÍCIO DO ESPAÇO PARA O SNIPPET DO GTM (HEAD)
+       Cole aqui o script do Google Tag Manager (parte 1 de 2).
+       Ele deve ficar o mais alto possível dentro do <head>.
+       ============================================================ -->
+
+  <!-- Exemplo (descomente e troque GTM-XXXXXXX pelo seu ID):
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+  -->
+
+  <!-- [GTM] FIM DO ESPAÇO PARA O SNIPPET DO GTM (HEAD) -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== Design tokens (inspirados na identidade da DP6: azuis, limpo, tech/dados) ===== */
+    :root {
+      --navy: #0b1f4d;       /* azul profundo: títulos, footer */
+      --blue: #1a56ff;       /* azul de ação: botões, links */
+      --blue-dark: #1240c4;  /* hover */
+      --sky: #e8f0ff;        /* fundo suave de seções */
+      --ink: #1d2742;        /* texto */
+      --muted: #5b6684;      /* texto secundário */
+      --line: #d9e2f5;       /* bordas */
+      --white: #fff;
+      --radius: 10px;
+      --font: "Plus Jakarta Sans", "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--white); line-height: 1.6; }
+    a { color: var(--blue); }
+    :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+    .wrap { width: min(1120px, 92%); margin-inline: auto; }
+
+    /* Botões */
+    .btn { display: inline-block; font: 700 1rem var(--font); padding: .85rem 1.5rem; border-radius: var(--radius);
+           border: 2px solid var(--blue); background: var(--blue); color: var(--white); text-decoration: none;
+           cursor: pointer; transition: background .2s; }
+    .btn:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+    .btn--ghost { background: transparent; color: var(--white); border-color: rgba(255,255,255,.6); }
+    .btn--ghost:hover { background: rgba(255,255,255,.12); border-color: var(--white); }
+    .btn--sm { padding: .55rem 1.1rem; font-size: .9rem; }
+
+    /* Header */
+    .site-header { position: sticky; top: 0; z-index: 10; background: var(--white); border-bottom: 1px solid var(--line); }
+    .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 68px; }
+    .logo { font-weight: 800; font-size: 1.3rem; color: var(--navy); text-decoration: none; }
+    .logo span { color: var(--blue); }
+    .nav { display: flex; align-items: center; gap: 1.5rem; }
+    .nav a:not(.btn) { color: var(--ink); text-decoration: none; font-weight: 500; }
+    .nav a:not(.btn):hover { color: var(--blue); }
+
+    /* Hero: o elemento memorável da página é o céu de pontos conectados (dados -> constelação) */
+    .hero { background: var(--navy); color: var(--white); position: relative; overflow: hidden; }
+    .hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; align-items: center; padding-block: 5rem; }
+    .hero h1 { font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.1; margin: 0 0 1rem; font-weight: 800; }
+    .hero p { color: #c7d6ff; font-size: 1.1rem; max-width: 52ch; margin: 0 0 2rem; }
+    .hero .actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+    .sky { width: 100%; height: auto; }
+    .sky line { stroke: #5b8bff; stroke-width: 1.5; opacity: .7; }
+    .sky circle { fill: var(--white); }
+    .sky .big { fill: #7fa6ff; }
+
+    /* Seções */
+    section { padding-block: 4.5rem; }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--navy); margin: 0 0 .6rem; line-height: 1.2; }
+    .lead { color: var(--muted); max-width: 60ch; margin: 0 0 2.5rem; }
+    .services { background: var(--sky); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem; }
+    .card h3 { margin: 0 0 .5rem; color: var(--navy); font-size: 1.15rem; }
+    .card p { margin: 0 0 1rem; color: var(--muted); }
+    .card a { font-weight: 700; text-decoration: none; }
+    .card a:hover { text-decoration: underline; }
+
+    /* Formulário */
+    .lead-section .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    form { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 2rem; box-shadow: 0 8px 30px rgba(11,31,77,.08); }
+    label { display: block; font-weight: 700; margin-bottom: .3rem; color: var(--navy); }
+    input { width: 100%; font: 1rem var(--font); padding: .75rem .9rem; border: 1.5px solid var(--line); border-radius: 8px; margin-bottom: 1.1rem; }
+    input:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 0 3px rgba(26,86,255,.18); }
+    input.invalid { border-color: #c62828; }
+    form .btn { width: 100%; }
+    .msg { margin: 1rem 0 0; font-weight: 700; min-height: 1.5em; }
+    .msg.ok { color: #1b7a3a; }
+    .msg.err { color: #c62828; }
+
+    /* Footer */
+    .site-footer { background: var(--navy); color: #c7d6ff; padding-block: 3rem; }
+    .site-footer .wrap { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between; align-items: center; }
+    .site-footer a { color: var(--white); margin-right: 1.2rem; }
+
+    /* Responsivo */
+    @media (max-width: 860px) {
+      .hero .wrap, .lead-section .wrap { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .nav a:not(.btn) { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+  </style>
+</head>
+
+<!-- ============================================================
+     [GTM] FIM DO <head> / INÍCIO DO <body>
+     O <head> foi fechado acima. O <body> abre logo abaixo.
+     ============================================================ -->
+<body data-section="lp-ceu-aberto">
+
+  <!-- [GTM] INÍCIO DO ESPAÇO PARA O SNIPPET DO GTM (BODY / noscript)
+       Cole aqui o <noscript> do GTM (parte 2 de 2),
+       imediatamente após a abertura da tag <body>.
+
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  -->
+  <!-- [GTM] FIM DO ESPAÇO PARA O SNIPPET DO GTM (BODY) -->
+
+  <!-- =========================== HEADER =========================== -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="#topo" data-type="link" data-title="Logo Céu Aberto">Céu<span>Aberto</span></a>
+      <nav class="nav" aria-label="Principal">
+        <a href="#servicos" data-type="link" data-title="Menu Diferenciais">Diferenciais</a>
+        <a href="#cadastro" data-type="link" data-title="Menu Cadastro">Cadastro</a>
+        <!-- data-type="botao-header": botão dentro do header -->
+        <a class="btn btn-sm btn--sm" href="#cadastro" data-type="botao-header" data-title="Quero participar">Quero participar</a>
+      </nav>
+    </div>
+  </header>
+  <!-- ========================= FIM DO HEADER ======================= -->
+
+  <main id="topo">
+    <!-- ============================ HERO ============================ -->
+    <section class="hero" style="padding:0">
+      <div class="wrap">
+        <div>
+          <h1>Observe o céu com quem mede, registra e compartilha dados.</h1>
+          <p>O Céu Aberto reúne telescópios compartilhados, noites guiadas e um diário de observação aberto para quem quer aprender astronomia na prática.</p>
+          <div class="actions">
+            <a class="btn" href="#cadastro" data-type="botao" data-title="Entrar para o clube">Entrar para o clube</a>
+            <a class="btn btn--ghost" href="#servicos" data-type="botao" data-title="Ver diferenciais">Ver diferenciais</a>
+          </div>
+        </div>
+        <!-- Constelação decorativa feita em SVG -->
+        <svg class="sky" viewBox="0 0 400 320" role="img" aria-label="Constelação ligando pontos de dados">
+          <line x1="40" y1="250" x2="120" y2="170"/><line x1="120" y1="170" x2="210" y2="200"/>
+          <line x1="210" y1="200" x2="280" y2="110"/><line x1="280" y1="110" x2="360" y2="60"/>
+          <line x1="120" y1="170" x2="150" y2="70"/><line x1="280" y1="110" x2="330" y2="220"/>
+          <circle class="big" cx="120" cy="170" r="9"/><circle class="big" cx="280" cy="110" r="11"/>
+          <circle cx="40" cy="250" r="5"/><circle cx="210" cy="200" r="6"/><circle cx="360" cy="60" r="5"/>
+          <circle cx="150" cy="70" r="4"/><circle cx="330" cy="220" r="5"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ===================== SERVIÇOS / DIFERENCIAIS ===================== -->
+    <section class="services" id="servicos">
+      <div class="wrap">
+        <h2>O que você ganha ao participar</h2>
+        <p class="lead">Estrutura para começar sem gastar com equipamento e método para evoluir a cada observação.</p>
+        <div class="grid">
+          <article class="card">
+            <h3>Telescópios compartilhados</h3>
+            <p>Reserve um telescópio do clube e pratique com orientação de observadores experientes.</p>
+            <a href="#cadastro" data-type="link" data-title="Saiba mais telescópios">Saiba mais</a>
+          </article>
+          <article class="card">
+            <h3>Noites de observação guiadas</h3>
+            <p>Encontros mensais em locais de céu escuro, com roteiro de objetos para cada estação.</p>
+            <a href="#cadastro" data-type="link" data-title="Saiba mais noites guiadas">Saiba mais</a>
+          </article>
+          <article class="card">
+            <h3>Diário de dados aberto</h3>
+            <p>Registre magnitude, data e condições do céu e consulte o histórico de toda a comunidade.</p>
+            <a href="#cadastro" data-type="link" data-title="Saiba mais diário de dados">Saiba mais</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ FORMULÁRIO ============================ -->
+    <section class="lead-section" id="cadastro">
+      <div class="wrap">
+        <div>
+          <h2>Receba o calendário de observações</h2>
+          <p class="lead">Preencha os dados ao lado e enviaremos as próximas datas e o guia de iniciante.</p>
+        </div>
+
+        <!-- novalidate: a validação é feita via JS para controlar quando o dataLayer pode disparar -->
+        <form id="form-lead" novalidate>
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" autocomplete="name" required>
+
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+
+          <label for="cargo">Cargo/Empresa</label>
+          <input type="text" id="cargo" name="cargo" autocomplete="organization-title" required>
+
+          <!-- type="submit": tratado SOMENTE no evento 'submit' do formulário (ver JS) -->
+          <button class="btn" type="submit" data-type="submit" data-title="Receber calendário">Receber calendário</button>
+          <p class="msg" id="msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================= FOOTER ============================= -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; 2026 Céu Aberto. Observação e dados para todos.</p>
+      <div>
+        <a href="#topo" data-type="link" data-title="Voltar ao topo">Voltar ao topo</a>
+        <a href="#servicos" data-type="link" data-title="Footer Diferenciais">Diferenciais</a>
+        <a class="btn btn--sm" href="#cadastro" data-type="botao-footer" data-title="Cadastre-se">Cadastre-se</a>
+      </div>
+    </div>
+  </footer>
+  <!-- =========================== FIM DO FOOTER ========================= -->
+
+  <script>
+  /* =====================================================================
+     LÓGICA DO DATALAYER
+     ---------------------------------------------------------------------
+     Padrão do evento (sempre este formato):
+       { event: 'clique', custom_section, custom_type, custom_title }
+
+     Como cada campo é obtido:
+       custom_section -> atributo data-section do <body> (ex.: "lp-ceu-aberto")
+       custom_type    -> atributo data-type do elemento (botao, botao-header,
+                         botao-footer, link, submit)
+       custom_title   -> atributo data-title do elemento; se não existir,
+                         usa o texto visível (textContent)
+     ===================================================================== */
+
+  // Garante que o dataLayer exista, mesmo antes de o GTM carregar.
+  window.dataLayer = window.dataLayer || [];
+
+  /* ---------------------------------------------------------------------
+     SANITIZAÇÃO ESTRITA
+     Transforma qualquer texto em: minúsculas, sem acentos/caracteres
+     especiais e com hífen no lugar dos espaços.
+     Ex.: "Receber Calendário!" -> "receber-calendario"
+     --------------------------------------------------------------------- */
+  function sanitize(valor) {
+    return String(valor || '')
+      .normalize('NFD')                 // separa letras de seus acentos (é -> e + ´)
+      .replace(/[\u0300-\u036f]/g, '')  // remove os acentos
+      .toLowerCase()                    // caixa baixa
+      .replace(/[^a-z0-9]+/g, '-')      // espaços e especiais viram hífen (agrupados)
+      .replace(/^-+|-+$/g, '');         // remove hífens nas pontas
+  }
+
+  /* ---------------------------------------------------------------------
+     Função única de disparo: monta o objeto no padrão e dá o push.
+     Todos os valores passam pela sanitização antes de entrar no dataLayer.
+     --------------------------------------------------------------------- */
+  function pushClique(el) {
+    var section = document.body.getAttribute('data-section');
+    var type    = el.getAttribute('data-type') || 'link';
+    var title   = el.getAttribute('data-title') || el.textContent;
+
+    window.dataLayer.push({
+      'event': 'clique',
+      'custom_section': sanitize(section),
+      'custom_type': sanitize(type),
+      'custom_title': sanitize(title)
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     CLIQUES EM LINKS E BOTÕES
+     Um único listener no document (delegação de evento) captura qualquer
+     <a> ou <button>, inclusive elementos futuros.
+     O botão de envio do formulário é IGNORADO aqui, porque ele só deve
+     disparar o dataLayer se o formulário estiver completo (veja abaixo).
+     --------------------------------------------------------------------- */
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('a, button');
+    if (!el) return;
+    if (el.matches('button[type="submit"]')) return; // tratado no evento 'submit'
+    pushClique(el);
+  });
+
+  /* ---------------------------------------------------------------------
+     ENVIO DO FORMULÁRIO
+     Regra: o evento de submit SÓ é enviado ao dataLayer se TODOS os campos
+     estiverem preenchidos (e válidos). Caso contrário, mostramos o erro e
+     NÃO damos push.
+     --------------------------------------------------------------------- */
+  var form = document.getElementById('form-lead');
+  var msg  = document.getElementById('msg');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault(); // página de demonstração: não recarrega
+
+    var campos = form.querySelectorAll('input[required]');
+    var tudoOk = true;
+
+    campos.forEach(function (campo) {
+      // trim() impede que apenas espaços contem como preenchido;
+      // checkValidity() valida o formato do e-mail.
+      var ok = campo.value.trim() !== '' && campo.checkValidity();
+      campo.classList.toggle('invalid', !ok);
+      if (!ok) tudoOk = false;
+    });
+
+    if (!tudoOk) {
+      msg.textContent = 'Preencha todos os campos corretamente para continuar.';
+      msg.className = 'msg err';
+      return; // <- sai sem disparar o dataLayer
+    }
+
+    // Formulário completo: dispara o evento com data-type="submit"
+    pushClique(form.querySelector('button[type="submit"]'));
+
+    msg.textContent = 'Cadastro recebido! Enviaremos o calendário por e-mail.';
+    msg.className = 'msg ok';
+    form.reset();
+  });
+  </script>
+</body>
+</html>
